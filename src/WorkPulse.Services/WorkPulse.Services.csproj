@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="TeamMembershipServices\Contracts\DTOs\Response\" />
+      <Folder Include="Users\Contracts\DTOs\Response\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WorkPulse.Entities\WorkPulse.Entities.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,6 @@
+@WorkPulse.RestApi_HostAddress = http://localhost:5243
+
+GET {{WorkPulse.RestApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
