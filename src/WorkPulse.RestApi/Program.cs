@@ -1,13 +1,12 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using WorkPulse.Persistence.DataContext;
-using WorkPulse.Persistence.UnitOfWorks;
-using WorkPulse.Persistence.Users;
-using WorkPulse.Services.UnitOfWorks;
-using WorkPulse.Services.Users;
-using WorkPulse.Services.Users.Contracts;
+using WorkPulse.RestApi.Config;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
@@ -21,10 +20,14 @@ builder.Services
                 .GetConnectionString(
                     "DefaultConnection")));
 
-builder.Services.AddScoped<IUserService, UserAppService>();
-builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
-builder.Services.AddScoped<IUserRepository, EfUserRepository>();
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()); 
+
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
+    containerBuilder.RegisterModule(new DependencyInjectionModule());
+});
+
 
 var app = builder.Build();
 
@@ -33,6 +36,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapScalarApiReference();
     app.MapControllers();
     app.UseDeveloperExceptionPage();
 }

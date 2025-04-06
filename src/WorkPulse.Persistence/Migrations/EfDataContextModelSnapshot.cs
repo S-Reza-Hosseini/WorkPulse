@@ -96,7 +96,7 @@ namespace WorkPulse.Persistence.Migrations
 
                     b.Property<string>("Permissions")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(MAX)");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte>("Role")
                         .HasColumnType("tinyint");
@@ -174,7 +174,6 @@ namespace WorkPulse.Persistence.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -184,7 +183,7 @@ namespace WorkPulse.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -194,7 +193,7 @@ namespace WorkPulse.Persistence.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("UserName")
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);

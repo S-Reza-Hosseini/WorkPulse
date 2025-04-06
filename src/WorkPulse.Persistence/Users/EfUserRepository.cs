@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WorkPulse.Entities.Users;
 using WorkPulse.Persistence.DataContext;
 using WorkPulse.Services.Users.Contracts;
@@ -9,5 +10,19 @@ public class EfUserRepository(EfDataContext context) : IUserRepository
     public async Task Add(User user)
     {
         await context.Set<User>().AddAsync(user);
+    }
+
+    public async Task<bool> IsDuplicate(string userId, string username, string email)
+    {
+        return await context.Set<User>()
+            .AnyAsync(u => 
+                (u.Username == username && u.Id == userId) ||
+                (u.Email == email && u.Id == userId));
+    }
+
+    public async Task<User?> Find(string userId)
+    {
+        return await context.Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == userId);
     }
 }

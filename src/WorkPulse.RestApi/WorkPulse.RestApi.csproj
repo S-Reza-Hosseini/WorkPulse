@@ -7,11 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Autofac" Version="8.2.1" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.12"/>
+        <PackageReference Include="Scalar.AspNetCore" Version="2.1.6" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\WorkPulse.Infrastructure\WorkPulse.Infrastructure.csproj" />
       <ProjectReference Include="..\WorkPulse.Persistence\WorkPulse.Persistence.csproj" />
       <ProjectReference Include="..\WorkPulse.Services\WorkPulse.Services.csproj" />
     </ItemGroup>

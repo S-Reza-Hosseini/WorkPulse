@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\WorkPulse.Contracts\WorkPulse.Contracts.csproj" />
       <ProjectReference Include="..\WorkPulse.Entities\WorkPulse.Entities.csproj" />
     </ItemGroup>
 

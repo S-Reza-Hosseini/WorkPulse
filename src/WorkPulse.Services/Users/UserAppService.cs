@@ -1,21 +1,25 @@
 using WorkPulse.Entities.TeamMemberships;
 using WorkPulse.Entities.Users;
+using WorkPulse.Services.Identity;
+using WorkPulse.Services.TeamMembershipServices.Contracts.DTOs.Request;
 using WorkPulse.Services.UnitOfWorks;
 using WorkPulse.Services.Users.Contracts;
 using WorkPulse.Services.Users.Contracts.DTOs.Request;
+using WorkPulse.Services.Users.Exceptions;
 
 namespace WorkPulse.Services.Users;
 
 public class UserAppService(
     IUserRepository repository,
-    IUnitOfWork unitOfWork) : IUserService
+    IUnitOfWork unitOfWork,
+    IIdentityService identityService) : IUserService
 {
     public async Task Add(AddUserDto dto)
     {
         var user = new User
         {
-            UserName = dto.UserName,
-            Password = dto.Password,
+            Username = dto.Username,
+            Password = identityService.HashPassword(dto.Password),
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Email = dto.Email,
@@ -34,5 +38,57 @@ public class UserAppService(
         
         await repository.Add(user);
         await unitOfWork.Save();
+    }
+
+    public async Task Update(string userId, UpdateUserDto dto)
+    {
+        
+        var user = await repository.Find(userId);
+
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+        
+        if (await repository.IsDuplicate(userId,dto.Username,dto.Email))
+        {
+            throw new DuplicateUserException();
+        }
+        
+        user.Username = dto.Username;
+        user.FirstName = dto.FirstName;
+        user.LastName = dto.LastName;
+        user.Email = dto.Email;
+        user.PhoneNumber = dto.PhoneNumber;
+        user.Avatar = dto.Avatar;
+        user.Role = dto.Role;
+
+
+        await AddTeamMemberships(user, dto.AddTeamMembershipDtos);
+        await DeleteTeamMemberships(user , dto.DeletedMembershipIds);
+        
+        await unitOfWork.Save();
+    }
+
+    private async Task DeleteTeamMemberships(User user,
+        List<long> dtoDeletedMembershipIds)
+    {
+        user.TeamMemberships
+            .RemoveAll(t => dtoDeletedMembershipIds
+                .Any(d => d == t.TeamId));
+    }
+
+    private async Task AddTeamMemberships(User user, 
+        List<AddUserTeamMembershipDto> dtoAddTeamMembershipDtos)
+    {
+        foreach (var teamMembershipDto in dtoAddTeamMembershipDtos)
+        {
+            user.TeamMemberships.Add(new TeamMembership
+            {
+                TeamId = teamMembershipDto.TeamId,
+                JoinedAt = DateTime.UtcNow,
+                Role = teamMembershipDto.TeamRole
+            });
+        }
     }
 }
