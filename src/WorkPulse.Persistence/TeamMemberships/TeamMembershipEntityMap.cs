@@ -15,7 +15,7 @@ public class TeamMembershipEntityMap:IEntityTypeConfiguration<TeamMembership>
         builder.Property(t => t.Role).IsRequired();
         builder.Property(t => t.JoinedAt).IsRequired();
         builder.Property(t => t.Permissions)
-            .IsRequired().HasColumnType("NVARCHAR(MAX)");
+            .IsRequired().HasColumnType("TEXT");  // should change to text or change to sqlite can create scema
         
         builder.HasOne(t => t.User)
             .WithMany(u => u.TeamMemberships)
