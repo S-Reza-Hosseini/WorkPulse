@@ -5,6 +5,7 @@ using WorkPulse.Services.TeamMembershipServices.Contracts.DTOs.Request;
 using WorkPulse.Services.UnitOfWorks;
 using WorkPulse.Services.Users.Contracts;
 using WorkPulse.Services.Users.Contracts.DTOs.Request;
+using WorkPulse.Services.Users.Contracts.DTOs.Response;
 using WorkPulse.Services.Users.Exceptions;
 
 namespace WorkPulse.Services.Users;
@@ -14,7 +15,7 @@ public class UserAppService(
     IUnitOfWork unitOfWork,
     IIdentityService identityService) : IUserService
 {
-    public async Task Add(AddUserDto dto)
+    public async Task<BaseUserInformationDto> Add(AddUserDto dto)
     {
         var user = new User
         {
@@ -38,6 +39,17 @@ public class UserAppService(
         
         await repository.Add(user);
         await unitOfWork.Save();
+
+        return new BaseUserInformationDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = user.Role
+        };
     }
 
     public async Task Update(string userId, UpdateUserDto dto)
@@ -68,6 +80,27 @@ public class UserAppService(
         await DeleteTeamMemberships(user , dto.DeletedMembershipIds);
         
         await unitOfWork.Save();
+    }
+
+    public async Task<FindUserResponseDto> FindByUsername(string username)
+    {
+        var user = await repository.FindByUsername(username);
+
+        return new FindUserResponseDto
+        {
+            UserId = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role,
+            IsExist = user != null,
+            Password = user.Password
+        };
+    }
+
+    public async Task<bool> CheckExistByUsername(string username)
+    {
+        return await repository.IsExistByUsername(username);
     }
 
     private async Task DeleteTeamMemberships(User user,

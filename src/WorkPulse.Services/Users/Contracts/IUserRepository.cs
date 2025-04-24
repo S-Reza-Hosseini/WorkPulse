@@ -8,4 +8,6 @@ public interface IUserRepository : Repository
     Task Add(User user);
     Task<bool> IsDuplicate(string userId, string username, string email);
     Task<User?> Find(string userId);
+    Task<User?> FindByUsername(string username);
+    Task<bool> IsExistByUsername(string username);
 }

@@ -3,8 +3,10 @@ using Autofac;
 using Microsoft.EntityFrameworkCore;
 using WorkPulse.Contracts;
 using WorkPulse.Infrastructure.Identity;
+using WorkPulse.Infrastructure.Security;
 using WorkPulse.Persistence.DataContext;
 using WorkPulse.Persistence.UnitOfWorks;
+using WorkPulse.Services.Common.Interfaces.Security;
 using WorkPulse.Services.Identity;
 using WorkPulse.Services.UnitOfWorks;
 using WorkPulse.Services.Users.Contracts;
@@ -35,6 +37,14 @@ public class DependencyInjectionModule : Autofac.Module
         
         builder.RegisterType<IdentityService>()
             .As<IIdentityService>()
+            .SingleInstance();
+        
+        builder.RegisterType<TokenService>()
+            .As<ITokenService>()
+            .SingleInstance();
+        
+        builder.RegisterType<JwtSettings>()
+            .AsSelf()
             .SingleInstance();
         
         builder.RegisterAssemblyTypes(repositoryAssembly)

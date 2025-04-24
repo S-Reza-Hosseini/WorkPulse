@@ -25,4 +25,16 @@ public class EfUserRepository(EfDataContext context) : IUserRepository
         return await context.Set<User>()
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
+
+    public async Task<User?> FindByUsername(string username)
+    {
+        return await context.Set<User>()
+            .FirstOrDefaultAsync(u => u.Username == username);
+    }
+
+    public async Task<bool> IsExistByUsername(string username)
+    {
+        return await context.Set<User>()
+            .AnyAsync(u => u.Username == username);
+    }
 }

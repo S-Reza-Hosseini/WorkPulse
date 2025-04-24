@@ -1,10 +1,13 @@
 using WorkPulse.Contracts;
 using WorkPulse.Services.Users.Contracts.DTOs.Request;
+using WorkPulse.Services.Users.Contracts.DTOs.Response;
 
 namespace WorkPulse.Services.Users.Contracts;
 
 public interface IUserService : Service
 {
-    Task Add(AddUserDto dto);
+    Task<BaseUserInformationDto> Add(AddUserDto dto);
     Task Update(string userId, UpdateUserDto dto);
+    Task<FindUserResponseDto> FindByUsername(string dtoUsername);
+    Task<bool> CheckExistByUsername(string dtoUsername);
 }

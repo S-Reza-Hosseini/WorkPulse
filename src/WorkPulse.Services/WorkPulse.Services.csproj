@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="TeamMembershipServices\Contracts\DTOs\Response\" />
-      <Folder Include="Users\Contracts\DTOs\Response\" />
     </ItemGroup>
 
     <ItemGroup>
