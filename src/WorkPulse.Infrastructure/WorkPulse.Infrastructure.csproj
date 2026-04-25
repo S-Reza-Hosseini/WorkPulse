@@ -11,16 +11,11 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
       <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.8.0" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.8.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\WorkPulse.Services\WorkPulse.Services.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="System.IdentityModel.Tokens.Jwt">
-        <HintPath>..\..\..\..\..\..\.nuget\packages\system.identitymodel.tokens.jwt\6.35.0\lib\net6.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WorkPulse.Services.Common.Interfaces.Security;
 using WorkPulse.Services.Users.Contracts.DTOs.Response;
+using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace WorkPulse.Infrastructure.Security;
 

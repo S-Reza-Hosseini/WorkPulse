@@ -23,7 +23,7 @@ public class UserAppService(
             Password = identityService.HashPassword(dto.Password),
             FirstName = dto.FirstName,
             LastName = dto.LastName,
-            Email = dto.Email,
+            Email = dto.Email, 
             PhoneNumber = dto.PhoneNumber,
             Role = dto.Role,
             CreationDate = DateTime.UtcNow,
@@ -44,7 +44,7 @@ public class UserAppService(
         {
             Id = user.Id,
             Username = user.Username,
-            Email = user.Email,
+            Email = user.Email!,
             PhoneNumber = user.PhoneNumber,
             FirstName = user.FirstName,
             LastName = user.LastName,
@@ -74,10 +74,11 @@ public class UserAppService(
         user.PhoneNumber = dto.PhoneNumber;
         user.Avatar = dto.Avatar;
         user.Role = dto.Role;
+        user.UpdatedAt = DateTime.UtcNow;
 
 
-        await AddTeamMemberships(user, dto.AddTeamMembershipDtos);
-        await DeleteTeamMemberships(user , dto.DeletedMembershipIds);
+        AddTeamMemberships(user, dto.AddTeamMembershipDtos);
+        DeleteTeamMemberships(user , dto.DeletedMembershipIds);
         
         await unitOfWork.Save();
     }
@@ -103,7 +104,7 @@ public class UserAppService(
         return await repository.IsExistByUsername(username);
     }
 
-    private async Task DeleteTeamMemberships(User user,
+    private void DeleteTeamMemberships(User user,
         List<long> dtoDeletedMembershipIds)
     {
         user.TeamMemberships
@@ -111,7 +112,7 @@ public class UserAppService(
                 .Any(d => d == t.TeamId));
     }
 
-    private async Task AddTeamMemberships(User user, 
+    private void AddTeamMemberships(User user, 
         List<AddUserTeamMembershipDto> dtoAddTeamMembershipDtos)
     {
         foreach (var teamMembershipDto in dtoAddTeamMembershipDtos)
@@ -119,6 +120,7 @@ public class UserAppService(
             user.TeamMemberships.Add(new TeamMembership
             {
                 TeamId = teamMembershipDto.TeamId,
+                UserId = user.Id,
                 JoinedAt = DateTime.UtcNow,
                 Role = teamMembershipDto.TeamRole
             });

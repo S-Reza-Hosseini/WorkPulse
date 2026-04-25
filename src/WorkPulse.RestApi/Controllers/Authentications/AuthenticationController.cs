@@ -1,8 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using WorkPulse.Services.Common.Interfaces.Security;
 using WorkPulse.Services.Identity;
 using WorkPulse.Services.Users.Contracts;
@@ -23,15 +19,15 @@ public class AuthenticationsController(
     public async Task<IActionResult> Login(LoginRequestDto dto)
     {
         var user = await service.FindByUsername(dto.Username);
-        if (user.IsExist && passwordHasher.VerifyPassword(user.Password,
+        if (user.IsExist && passwordHasher.VerifyPassword(user.Password!,
                 dto.Password))
         {
             return Ok(tokenService.GenerateToken(new BaseUserInformationDto
             {
                 Username = dto.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
+                FirstName = user.FirstName!,
+                LastName = user.LastName!,
+                Email = user.Email!,
                 Role = user.Role,
                 Id = user.UserId
             }));

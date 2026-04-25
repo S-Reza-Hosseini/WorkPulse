@@ -16,13 +16,14 @@ public class EfUserRepository(EfDataContext context) : IUserRepository
     {
         return await context.Set<User>()
             .AnyAsync(u => 
-                (u.Username == username && u.Id == userId) ||
-                (u.Email == email && u.Id == userId));
+                (u.Username == username && u.Id != userId) ||
+                (u.Email == email && u.Id != userId));
     }
 
     public async Task<User?> Find(string userId)
     {
         return await context.Set<User>()
+            .Include(u => u.TeamMemberships)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
