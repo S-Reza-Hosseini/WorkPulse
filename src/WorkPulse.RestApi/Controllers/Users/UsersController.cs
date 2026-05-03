@@ -7,9 +7,9 @@ using WorkPulse.Services.Users.Contracts.DTOs.Response;
 
 namespace WorkPulse.RestApi.Controllers.Users;
 [ApiController]
-[Route("users")]
+[Route("api/[controller]")]
 [Authorize]
-public class UserController(
+public class UsersController(
     IUserService service,
     IUserQuery query): ControllerBase
 {
