@@ -6,8 +6,8 @@ using WorkPulse.Infrastructure.Identity;
 using WorkPulse.Infrastructure.Security;
 using WorkPulse.Persistence.DataContext;
 using WorkPulse.Persistence.UnitOfWorks;
+using WorkPulse.Services.Common.Interfaces.identity;
 using WorkPulse.Services.Common.Interfaces.Security;
-using WorkPulse.Services.Identity;
 using WorkPulse.Services.UnitOfWorks;
 using WorkPulse.Services.Users.Contracts;
 

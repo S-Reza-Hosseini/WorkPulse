@@ -1,4 +1,4 @@
-using WorkPulse.Services.Identity;
+using WorkPulse.Services.Common.Interfaces.identity;
 
 namespace WorkPulse.Infrastructure.Identity;
 

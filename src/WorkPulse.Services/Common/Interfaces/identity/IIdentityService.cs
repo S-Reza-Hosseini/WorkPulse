@@ -1,6 +1,4 @@
-using WorkPulse.Contracts;
-
-namespace WorkPulse.Services.Identity;
+namespace WorkPulse.Services.Common.Interfaces.identity;
 
 public interface IIdentityService 
 {
