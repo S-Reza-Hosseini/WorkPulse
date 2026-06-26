@@ -15,7 +15,7 @@ public class TaskItemsEntityMap : IEntityTypeConfiguration<TaskItem>
         
         builder.Property(ti => ti.Id).ValueGeneratedOnAdd();
         builder.Property(ti => ti.Title).IsRequired().HasMaxLength(150);
-        builder.Property(ti => ti.Description).IsRequired().HasMaxLength(2000);
+        builder.Property(ti => ti.Description).IsRequired(false).HasMaxLength(2000);
         builder.Property(ti => ti.Status).HasDefaultValue(TaskStatus.Todo);
         builder.Property(ti => ti.CreatedAt).IsRequired();
         builder.Property(ti => ti.UpdatedAt);
