@@ -7,21 +7,21 @@ public class EfUnitOfWork(EfDataContext context) : IUnitOfWork
 {
     public async Task Save()
     {
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
-    
+
     public async Task Begin()
     {
-        context.Database.BeginTransaction();
+        await context.Database.BeginTransactionAsync();
     }
 
     public async Task Commit()
     {
-        context.Database.CommitTransaction();
+        await context.Database.CommitTransactionAsync();
     }
 
     public async Task Rollback()
     {
-        context.Database.RollbackTransaction();
+        await context.Database.RollbackTransactionAsync();
     }
 }

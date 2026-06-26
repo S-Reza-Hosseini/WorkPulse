@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using WorkPulse.Services.Common.Interfaces.identity;
 using WorkPulse.Services.Common.Interfaces.Security;
-using WorkPulse.Services.Identity;
 using WorkPulse.Services.Users.Contracts;
 using WorkPulse.Services.Users.Contracts.DTOs.Request;
 using WorkPulse.Services.Users.Contracts.DTOs.Response;
+using WorkPulse.Services.Users.Exceptions;
 
 namespace WorkPulse.RestApi.Controllers.Authentications;
 
@@ -41,16 +42,16 @@ public class AuthenticationsController(
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody]AddUserDto dto)
     {
-        if (await service.CheckExistByUsername(dto.Username))
+        try
         {
-           throw new Exception($"Username {dto.Username} already exists");
+            var response = await service.Add(dto);
+            var jwt = tokenService.GenerateToken(response);
+            return Ok(jwt);
         }
-
-        var response = await service.Add(dto);
-        
-        
-        var jwt = tokenService.GenerateToken(response);
-        return Ok(jwt);
+        catch (DuplicateUserException)
+        {
+            return Conflict($"Username '{dto.Username}' or email '{dto.Email}' already exists.");
+        }
     }
         
 }

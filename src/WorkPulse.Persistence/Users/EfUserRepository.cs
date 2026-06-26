@@ -38,4 +38,15 @@ public class EfUserRepository(EfDataContext context) : IUserRepository
         return await context.Set<User>()
             .AnyAsync(u => u.Username == username);
     }
+
+    public async Task<bool> IsExistByEmail(string email)
+    {
+        return await context.Set<User>()
+            .AnyAsync(u => u.Email == email);
+    }
+
+    public void Delete(User user)
+    {
+        context.Set<User>().Remove(user);
+    }
 }

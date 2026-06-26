@@ -15,6 +15,11 @@ public class UserAppService(
 {
     public async Task<BaseUserInformationDto> Add(AddUserDto dto)
     {
+        if (await repository.IsExistByUsername(dto.Username) || await repository.IsExistByEmail(dto.Email))
+        {
+            throw new DuplicateUserException();
+        }
+
         var user = new User
         {
             Username = dto.Username,
@@ -70,9 +75,22 @@ public class UserAppService(
         await unitOfWork.Save();
     }
 
+    public async Task Delete(string userId)
+    {
+        var user = await repository.Find(userId) ?? throw new UserNotFoundException();
+
+        repository.Delete(user);
+        await unitOfWork.Save();
+    }
+
     public async Task<FindUserResponseDto> FindByUsername(string username)
     {
         var user = await repository.FindByUsername(username);
+
+        if (user is null)
+        {
+            return new FindUserResponseDto { IsExist = false };
+        }
 
         return new FindUserResponseDto
         {
@@ -81,13 +99,8 @@ public class UserAppService(
             LastName = user.LastName,
             Email = user.Email,
             Role = user.Role,
-            IsExist = user != null,
+            IsExist = true,
             Password = user.Password
         };
-    }
-
-    public async Task<bool> CheckExistByUsername(string username)
-    {
-        return await repository.IsExistByUsername(username);
     }
 }

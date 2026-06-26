@@ -4,7 +4,7 @@ namespace WorkPulse.Services.Users.Contracts.DTOs.Response;
 
 public class FindUserResponseDto
 {
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public UserRole Role { get; set; }

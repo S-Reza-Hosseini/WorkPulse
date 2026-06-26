@@ -10,4 +10,6 @@ public interface IUserRepository : Repository
     Task<User?> Find(string userId);
     Task<User?> FindByUsername(string username);
     Task<bool> IsExistByUsername(string username);
+    Task<bool> IsExistByEmail(string email);
+    void Delete(User user);
 }

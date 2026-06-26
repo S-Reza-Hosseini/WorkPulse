@@ -8,6 +8,6 @@ public interface IUserService : Service
 {
     Task<BaseUserInformationDto> Add(AddUserDto dto);
     Task Update(string userId, UpdateUserDto dto);
+    Task Delete(string userId);
     Task<FindUserResponseDto> FindByUsername(string dtoUsername);
-    Task<bool> CheckExistByUsername(string dtoUsername);
 }
