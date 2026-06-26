@@ -1,7 +1,5 @@
-using WorkPulse.Entities.TeamMemberships;
 using WorkPulse.Entities.Users;
-using WorkPulse.Services.Identity;
-using WorkPulse.Services.TeamMembershipServices.Contracts.DTOs.Request;
+using WorkPulse.Services.Common.Interfaces.identity;
 using WorkPulse.Services.UnitOfWorks;
 using WorkPulse.Services.Users.Contracts;
 using WorkPulse.Services.Users.Contracts.DTOs.Request;
@@ -23,20 +21,13 @@ public class UserAppService(
             Password = identityService.HashPassword(dto.Password),
             FirstName = dto.FirstName,
             LastName = dto.LastName,
-            Email = dto.Email, 
+            Email = dto.Email,
             PhoneNumber = dto.PhoneNumber,
             Role = dto.Role,
             CreationDate = DateTime.UtcNow,
-            Avatar = dto.Avatar,
-            TeamMemberships = dto.TeamMemberships.Select(tm =>
-                new TeamMembership
-                {
-                    TeamId = tm.TeamId,
-                    JoinedAt = DateTime.UtcNow,
-                    Role = tm.TeamRole,
-                }).ToList()
+            Avatar = dto.Avatar
         };
-        
+
         await repository.Add(user);
         await unitOfWork.Save();
 
@@ -54,19 +45,19 @@ public class UserAppService(
 
     public async Task Update(string userId, UpdateUserDto dto)
     {
-        
+
         var user = await repository.Find(userId);
 
         if (user is null)
         {
             throw new UserNotFoundException();
         }
-        
+
         if (await repository.IsDuplicate(userId,dto.Username,dto.Email))
         {
             throw new DuplicateUserException();
         }
-        
+
         user.Username = dto.Username;
         user.FirstName = dto.FirstName;
         user.LastName = dto.LastName;
@@ -76,10 +67,6 @@ public class UserAppService(
         user.Role = dto.Role;
         user.UpdatedAt = DateTime.UtcNow;
 
-
-        AddTeamMemberships(user, dto.AddTeamMembershipDtos);
-        DeleteTeamMemberships(user , dto.DeletedMembershipIds);
-        
         await unitOfWork.Save();
     }
 
@@ -102,28 +89,5 @@ public class UserAppService(
     public async Task<bool> CheckExistByUsername(string username)
     {
         return await repository.IsExistByUsername(username);
-    }
-
-    private void DeleteTeamMemberships(User user,
-        List<long> dtoDeletedMembershipIds)
-    {
-        user.TeamMemberships
-            .RemoveAll(t => dtoDeletedMembershipIds
-                .Any(d => d == t.TeamId));
-    }
-
-    private void AddTeamMemberships(User user, 
-        List<AddUserTeamMembershipDto> dtoAddTeamMembershipDtos)
-    {
-        foreach (var teamMembershipDto in dtoAddTeamMembershipDtos)
-        {
-            user.TeamMemberships.Add(new TeamMembership
-            {
-                TeamId = teamMembershipDto.TeamId,
-                UserId = user.Id,
-                JoinedAt = DateTime.UtcNow,
-                Role = teamMembershipDto.TeamRole
-            });
-        }
     }
 }

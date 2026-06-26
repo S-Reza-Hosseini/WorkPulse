@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="TeamMembershipServices\Contracts\DTOs\Response\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\WorkPulse.Contracts\WorkPulse.Contracts.csproj" />
       <ProjectReference Include="..\WorkPulse.Entities\WorkPulse.Entities.csproj" />
     </ItemGroup>

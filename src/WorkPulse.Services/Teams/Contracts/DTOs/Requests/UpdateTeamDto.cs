@@ -1,11 +1,8 @@
-using WorkPulse.Services.TeamMemberships.Contracts.DTOs.Requests;
-
 namespace WorkPulse.Services.Teams.Contracts.DTOs.Requests;
 
-public class AddTeamDto
+public class UpdateTeamDto
 {
     public required string Name { get; set; }
     public string? Description { get; set; }
     public string? Avatar { get; set; }
-    public List<AddTeamMemberDto> Members { get; set; } = [];
 }
